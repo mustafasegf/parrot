@@ -1,7 +1,7 @@
 use crate::{
     commands::{
-        autopause::*, clear::*, leave::*, manage_sources::*, now_playing::*, pause::*, play::*,
-        queue::*, remove::*, repeat::*, resume::*, seek::*, shuffle::*, skip::*, stop::*,
+        autopause::*, clear::*, help::*, leave::*, manage_sources::*, now_playing::*, pause::*,
+        play::*, queue::*, remove::*, repeat::*, resume::*, seek::*, shuffle::*, skip::*, stop::*,
         summon::*, version::*, voteskip::*,
     },
     connection::{check_voice_connections, Connection},
@@ -273,6 +273,10 @@ impl SerenityHandler {
                 .create_application_command(|command| {
                     command.name("voteskip").description("Starts a vote to skip the current track")
                 })
+                .create_application_command(|command| {
+                    command.name("help").description("Displays the help message")
+                })
+
         })
         .await
         .expect("failed to create command")
@@ -377,6 +381,7 @@ impl SerenityHandler {
             "summon" => summon(ctx, command, true).await,
             "version" => version(ctx, command).await,
             "voteskip" => voteskip(ctx, command).await,
+            "help" => help(ctx, command).await,
             _ => unreachable!(),
         }
     }

@@ -16,3 +16,4 @@ pub mod stop;
 pub mod summon;
 pub mod version;
 pub mod voteskip;
+pub mod help;
