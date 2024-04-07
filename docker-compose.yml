@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  server:
+    container_name: parrot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - .env
+    # - path: "./.env"
+    #   required: true
