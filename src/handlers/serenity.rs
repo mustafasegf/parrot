@@ -298,8 +298,9 @@ impl SerenityHandler {
                                 .max_int_value(100)
                         })
                 })
-                // TODO: add search command with button to choose and different pages. only work
-            // for youtube tho
+                // TODO: add search command with button to choose and different pages. only work for youtube tho
+                // TODO: remove last playlist
+                // TODO: remove all of my song. need to track who the fuck inputed the song. need to cook 
 
 
         })

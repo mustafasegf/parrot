@@ -13,6 +13,7 @@ use crate::errors::ParrotError;
 
 const DEFAULT_SETTINGS_PATH: &str = "data/settings";
 const DEFAULT_ALLOWED_DOMAINS: [&str; 0] = [];
+const DEFAULT_BANNED_DOMAINS: [&str; 1] = ["."];
 
 lazy_static! {
     static ref SETTINGS_PATH: String =
@@ -35,11 +36,16 @@ impl GuildSettings {
             .map(|d| d.to_string())
             .collect();
 
+        let banned_domains: HashSet<String> = DEFAULT_BANNED_DOMAINS
+            .iter()
+            .map(|d| d.to_string())
+            .collect();
+
         GuildSettings {
             guild_id,
             autopause: false,
             allowed_domains,
-            banned_domains: HashSet::new(),
+            banned_domains,
             volume: 1.0,
         }
     }
