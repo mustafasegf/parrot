@@ -8,5 +8,9 @@ services:
     restart: always
     env_file:
       - .env
-    # - path: "./.env"
-    #   required: true
+    volumes:
+      - settings:/data/settings
+
+volumes:
+  settings:
+    driver: local
