@@ -25,6 +25,7 @@ pub struct GuildSettings {
     pub autopause: bool,
     pub allowed_domains: HashSet<String>,
     pub banned_domains: HashSet<String>,
+    pub volume: f32,
 }
 
 impl GuildSettings {
@@ -39,6 +40,7 @@ impl GuildSettings {
             autopause: false,
             allowed_domains,
             banned_domains: HashSet::new(),
+            volume: 1.0,
         }
     }
 
@@ -95,6 +97,10 @@ impl GuildSettings {
             .collect();
 
         self.banned_domains = banned;
+    }
+
+    pub fn set_volume(&mut self, volume: f32) {
+        self.volume = volume.max(0.0).min(1.0);
     }
 
     pub fn update_domains(&mut self) {

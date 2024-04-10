@@ -17,3 +17,4 @@ pub mod summon;
 pub mod version;
 pub mod voteskip;
 pub mod help;
+pub mod volume;

@@ -2,7 +2,7 @@ use crate::{
     commands::{
         autopause::*, clear::*, help::*, leave::*, manage_sources::*, now_playing::*, pause::*,
         play::*, queue::*, remove::*, repeat::*, resume::*, seek::*, shuffle::*, skip::*, stop::*,
-        summon::*, version::*, voteskip::*,
+        summon::*, version::*, volume::*, voteskip::*,
     },
     connection::{check_voice_connections, Connection},
     errors::ParrotError,
@@ -283,6 +283,21 @@ impl SerenityHandler {
                 .create_application_command(|command| {
                     command.name("help").description("Displays the help message")
                 })
+                .create_application_command(|command| {
+                    command
+                        .name("volume")
+                        .description("Sets or check the volume of the bot")
+                        .default_member_permissions(Permissions::MANAGE_CHANNELS)
+                        .create_option(|option| {
+                            option
+                                .name("volume")
+                                .description("The volume to set (0 to 100)")
+                                .kind(CommandOptionType::Number)
+                                .required(false)
+                                .min_int_value(0)
+                                .max_int_value(100)
+                        })
+                })
 
         })
         .await
@@ -362,10 +377,12 @@ impl SerenityHandler {
                     _ => Ok(()),
                 }
             }
-            "np" | "nowplaying" | "queue" => match check_voice_connections(&guild, &user_id, &bot_id) {
-                Connection::User(_) | Connection::Neither => Err(ParrotError::NotConnected),
-                _ => Ok(()),
-            },
+            "np" | "nowplaying" | "queue" => {
+                match check_voice_connections(&guild, &user_id, &bot_id) {
+                    Connection::User(_) | Connection::Neither => Err(ParrotError::NotConnected),
+                    _ => Ok(()),
+                }
+            }
             _ => Ok(()),
         }?;
 
@@ -389,6 +406,7 @@ impl SerenityHandler {
             "version" => version(ctx, command).await,
             "voteskip" => voteskip(ctx, command).await,
             "help" => help(ctx, command).await,
+            "volume" => volume(ctx, command).await,
             _ => unreachable!(),
         }
     }
