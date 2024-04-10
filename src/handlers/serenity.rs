@@ -21,6 +21,7 @@ use serenity::{
         },
         gateway::Ready,
         id::GuildId,
+        permissions::Permissions,
         prelude::{Activity, VoiceState},
     },
     prelude::Mentionable,
@@ -101,6 +102,7 @@ impl SerenityHandler {
                     command
                         .name("managesources")
                         .description("Manage streaming from different sources")
+                        .default_member_permissions(Permissions::MANAGE_CHANNELS)
                 })
                 .create_application_command(|command| {
                     command
