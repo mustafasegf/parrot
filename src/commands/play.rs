@@ -126,7 +126,7 @@ pub async fn play(
                     .await;
                 }
 
-                YouTube::extract(url)
+                YouTube::extract(&url_data)
             }
             None => None,
         },
@@ -174,6 +174,7 @@ pub async fn play(
                 let queue = enqueue_track(&call, &query_type, volume).await?;
                 update_queue_messages(&ctx.http, &ctx.data, &queue, guild_id).await;
             }
+            // TODO: ALSO, MAYBE IMPLEMENT A CHANNEL TO STOP THIS IF /STOP OR DISCONNECT IS COMMAND
             QueryType::PlaylistLink(url) => {
                 let urls = YouTubeRestartable::ytdl_playlist(&url, mode)
                     .await

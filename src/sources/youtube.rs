@@ -16,14 +16,43 @@ use std::{
     time::Duration,
 };
 use tokio::{process::Command as TokioCommand, task};
+use url::Url;
 
 const NEWLINE_BYTE: u8 = 0xA;
 
 pub struct YouTube {}
 
 impl YouTube {
-    pub fn extract(query: &str) -> Option<QueryType> {
-        if query.contains("list=") {
+    pub fn extract(query: &Url) -> Option<QueryType> {
+        // if key have list and v, remove the list and return as video. if it's have only list, return as playlist. else return as video
+
+        let has_list = query
+            .query_pairs()
+            .find_map(|(key, _)| match key.as_ref() {
+                "list" => Some(()),
+                _ => None,
+            })
+            .is_some();
+
+        let has_v = query
+            .query_pairs()
+            .find_map(|(key, _)| match key.as_ref() {
+                "v" => Some(()),
+                _ => None,
+            })
+            .is_some();
+
+        if has_list && has_v {
+            let param = query
+                .query_pairs()
+                .filter(|(key, _)| key != "list")
+                .collect::<Vec<_>>();
+
+            let mut query = query.clone();
+            query.query_pairs_mut().clear().extend_pairs(param);
+
+            Some(QueryType::VideoLink(query.to_string()))
+        } else if has_list {
             Some(QueryType::PlaylistLink(query.to_string()))
         } else {
             Some(QueryType::VideoLink(query.to_string()))

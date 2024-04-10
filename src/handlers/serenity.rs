@@ -298,6 +298,9 @@ impl SerenityHandler {
                                 .max_int_value(100)
                         })
                 })
+                // TODO: add search command with button to choose and different pages. only work
+            // for youtube tho
+
 
         })
         .await
