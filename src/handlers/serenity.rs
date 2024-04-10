@@ -111,6 +111,11 @@ impl SerenityHandler {
                 })
                 .create_application_command(|command| {
                     command
+                        .name("nowplaying")
+                        .description("Displays information about the current track")
+                })
+                .create_application_command(|command| {
+                    command
                         .name("pause")
                         .description("Pauses the current track")
                 })
@@ -357,7 +362,7 @@ impl SerenityHandler {
                     _ => Ok(()),
                 }
             }
-            "np" | "queue" => match check_voice_connections(&guild, &user_id, &bot_id) {
+            "np" | "nowplaying" | "queue" => match check_voice_connections(&guild, &user_id, &bot_id) {
                 Connection::User(_) | Connection::Neither => Err(ParrotError::NotConnected),
                 _ => Ok(()),
             },
@@ -369,7 +374,7 @@ impl SerenityHandler {
             "clear" => clear(ctx, command).await,
             "leave" => leave(ctx, command).await,
             "managesources" => allow(ctx, command).await,
-            "np" => now_playing(ctx, command).await,
+            "np" | "nowplaying" => now_playing(ctx, command).await,
             "pause" => pause(ctx, command).await,
             "play" | "superplay" => play(ctx, command).await,
             "queue" => queue(ctx, command).await,
