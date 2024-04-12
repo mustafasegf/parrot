@@ -9,8 +9,4 @@ services:
     env_file:
       - .env
     volumes:
-      - settings:/data/settings
-
-volumes:
-  settings:
-    driver: local
+      - ./data/settings:/data/settings
